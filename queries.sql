@@ -162,3 +162,17 @@ FROM current_emp as ce
         ON (de.dept_no = d.dept_no);
 -- confirming successful table creating before csv export
 SELECT * FROM dept_info;
+-- creating new sales team retirement table by querying the new dept_info table
+SELECT *
+INTO dept_info_sales
+FROM dept_info
+WHERE dept_name = 'Sales';
+-- confirming count of 5860 records previously generated in current_emp_dept table 
+SELECT * FROM dept_info_sales;
+-- creating new table to include both the sales and development teams
+SELECT *
+INTO dept_info_sales_development
+FROM dept_info
+WHERE dept_name IN ('Sales', 'Development');
+-- confirming total count of 15141 from records previously generated in current_emp_dept table 
+SELECT * FROM dept_info_sales_development;
