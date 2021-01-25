@@ -110,3 +110,102 @@ ORDER BY count DESC;
 -- Export the Retiring Titles table as retiring_titles.csv and save it to your Data folder in the Pewlett-Hackard-Analysis folder.
     -- Before you export your table, confirm that it looks like this image:
 SELECT * FROM retiring_titles;
+
+-- Deliverable 2: The Employees Eligible for the Mentorship Program
+-- Retrieve the emp_no, first_name, last_name, and birth_date columns from the Employees table.
+SELECT emp_no, first_name, last_name, birth_date
+FROM employees
+
+-- Retrieve the from_date and to_date columns from the Department Employee table.
+SELECT from_date, to_date
+FROM dept_emp
+
+-- Retrieve the title column from the Titles table.
+SELECT title
+FROM titles
+
+-- Use a DISTINCT ON statement to retrieve the first occurrence of the employee number for each set of rows defined by the ON () clause.
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+    e.first_name,
+    e.last_name,
+    e.birth_date,
+    de.from_date,
+    de.to_date,
+    ti.title
+
+-- Create a new table using the INTO clause.
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+    e.first_name,
+    e.last_name,
+    e.birth_date,
+    de.from_date,
+    de.to_date,
+    ti.title
+INTO mentorship_eligibilty
+
+-- Join the Employees and the Department Employee tables on the primary key.
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+    e.first_name,
+    e.last_name,
+    e.birth_date,
+    de.from_date,
+    de.to_date,
+    ti.title
+INTO mentorship_eligibilty
+FROM employees as e
+    INNER JOIN dept_emp as de
+        ON (e.emp_no = de.emp_no)
+
+-- Join the Employees and the Titles tables on the primary key.
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+    e.first_name,
+    e.last_name,
+    e.birth_date,
+    de.from_date,
+    de.to_date,
+    ti.title
+INTO mentorship_eligibilty
+FROM employees as e
+    INNER JOIN dept_emp as de
+        ON (e.emp_no = de.emp_no)
+    INNER JOIN titles as ti
+        ON (e.emp_no = ti.emp_no)
+
+-- Filter the data on the to_date column to get current employees whose birth dates are between January 1, 1965 and December 31, 1965.
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+    e.first_name,
+    e.last_name,
+    e.birth_date,
+    de.from_date,
+    de.to_date,
+    ti.title
+INTO mentorship_eligibilty
+FROM employees as e
+    INNER JOIN dept_emp as de
+        ON (e.emp_no = de.emp_no)
+    INNER JOIN titles as ti
+        ON (e.emp_no = ti.emp_no)
+WHERE (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+    AND (de.to_date = '9999-01-01')
+
+-- Order the table by the employee number.
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+    e.first_name,
+    e.last_name,
+    e.birth_date,
+    de.from_date,
+    de.to_date,
+    ti.title
+INTO mentorship_eligibilty
+FROM employees as e
+    INNER JOIN dept_emp as de
+        ON (e.emp_no = de.emp_no)
+    INNER JOIN titles as ti
+        ON (e.emp_no = ti.emp_no)
+WHERE (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+    AND (de.to_date = '9999-01-01')
+ORDER BY e.emp_no ASC, de.from_date DESC;
+
+-- Export the Mentorship Eligibility table as mentorship_eligibilty.csv and save it to your Data folder in the Pewlett-Hackard-Analysis folder.
+    -- Before you export your table, confirm that it looks like this image:
+SELECT * FROM mentorship_eligibilty;
